@@ -37,6 +37,3 @@ DEPENDENCIES
   ofx!
   rake (~> 13.0.6)
   rspec (~> 3.10)
-
-BUNDLED WITH
-   1.16.4
