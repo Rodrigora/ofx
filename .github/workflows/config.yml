@@ -6,12 +6,20 @@ jobs:
   rspec:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - '3.0.6'
+          - '3.1.4'
+          - '3.2.2'
+
     steps:
       - uses: actions/checkout@v3
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
       - run: bundle exec rspec
