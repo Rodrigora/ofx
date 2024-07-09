@@ -161,7 +161,7 @@ module OFX
           _, hours, mins = *offset.match(/\A([+-]?\d{1,2})(\d{0,2})?\z/)
           offset = format('%+03d%02d', hours.to_i, mins.to_i)
         else
-          offset = '+0000'
+          offset = OFX.configuration.default_timezone
         end
 
         date << " #{offset}"

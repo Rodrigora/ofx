@@ -35,7 +35,7 @@ describe OFX::Parser::OFX102 do
     @parser.statements.size.should == 1
     @parser.statements.first.should be_a_kind_of(OFX::Statement)
   end
-  
+
   it "should know about all transaction types" do
     valid_types = [
       'CREDIT', 'DEBIT', 'INT', 'DIV', 'FEE', 'SRVCHG', 'DEP', 'ATM', 'POS', 'XFER',
@@ -53,6 +53,25 @@ describe OFX::Parser::OFX102 do
       it "should default to GMT" do
         @parser.send(:build_date, "20170904").should == Time.gm(2017, 9, 4)
         @parser.send(:build_date, "20170904082855").should == Time.gm(2017, 9, 4, 8, 28, 55)
+      end
+
+      context 'with the default timezone set to -0300' do
+        around do |example|
+          original_config = OFX.configuration.dup
+          example.run
+          OFX.configuration = original_config
+        end
+
+        it "should override the default timezone" do
+          OFX.configure do |config|
+            config.default_timezone = "-0300"
+          end
+
+          expect(@parser.send(:build_date, "20170904")).to eq Time.gm(2017, 9, 4, 3)
+          expect(@parser.send(:build_date, "20170904082855")).to eq(
+            Time.gm(2017, 9, 4, 11, 28, 55)
+          )
+        end
       end
     end
 

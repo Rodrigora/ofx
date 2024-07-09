@@ -6,6 +6,7 @@ require 'bigdecimal'
 
 require 'kconv'
 
+require 'ofx/configuration'
 require 'ofx/errors'
 require 'ofx/parser'
 require 'ofx/parser/ofx102'
@@ -32,4 +33,16 @@ def OFX(resource, &block)
   end
 
   parser
+end
+
+module OFX
+  class << self
+    attr_accessor :configuration
+  end
+
+  self.configuration ||= Configuration.new
+
+  def self.configure
+    yield(configuration)
+  end
 end
